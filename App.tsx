@@ -1,20 +1,60 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  StatusBar,
+  ActivityIndicator,
+  View,
+} from 'react-native';
+import SwipeCardList from './components/SwipeCardList';
+import { getInitialCards, loadMoreCards } from './services/mockDataService';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+interface CardItem {
+  id: string;
+  type: 'image' | 'video' | 'text';
+  content: string;
+  title?: string;
+  description?: string;
 }
+
+const App = () => {
+  const [initialData, setInitialData] = useState<CardItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Load initial data
+    const data = getInitialCards();
+    setInitialData(data);
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar hidden />
+      <SwipeCardList initialData={initialData} loadMoreData={loadMoreCards} />
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: '#000',
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#000',
     justifyContent: 'center',
+    alignItems: 'center',
   },
 });
+
+export default App;
