@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,15 +6,11 @@ import {
   Image,
   Dimensions,
   ViewStyle,
-  StatusBar,
-  Platform,
 } from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
 const { width, height } = Dimensions.get('window');
-// Account for the status bar height on iOS
-const statusBarHeight =
-  Platform.OS === 'ios' ? StatusBar.currentHeight || 0 : 0;
+
 const screenHeight = height;
 
 interface SwipeCardProps {

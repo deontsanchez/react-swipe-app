@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  StatusBar,
-  ActivityIndicator,
-  View,
-  Platform,
-} from 'react-native';
+import { StyleSheet, StatusBar, ActivityIndicator, View } from 'react-native';
 import SwipeCardList from './components/SwipeCardList';
 import { getInitialCards, loadMoreCards } from './services/mockDataService';
 

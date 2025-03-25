@@ -10,15 +10,12 @@ import {
   ViewToken,
   ListRenderItemInfo,
   StatusBar,
-  Platform,
 } from 'react-native';
 import SwipeCard from './SwipeCard';
 import { Animated } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
-// Account for the status bar height on iOS
-const statusBarHeight =
-  Platform.OS === 'ios' ? StatusBar.currentHeight || 0 : 0;
+
 const screenHeight = height;
 
 interface CardItem {
