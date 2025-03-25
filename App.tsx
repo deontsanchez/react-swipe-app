@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   StatusBar,
   ActivityIndicator,
   View,
+  Platform,
 } from 'react-native';
 import SwipeCardList from './components/SwipeCardList';
 import { getInitialCards, loadMoreCards } from './services/mockDataService';
@@ -37,10 +37,14 @@ const App = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar hidden />
+    <View style={styles.container}>
+      <StatusBar
+        translucent={true}
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
       <SwipeCardList initialData={initialData} loadMoreData={loadMoreCards} />
-    </SafeAreaView>
+    </View>
   );
 };
 

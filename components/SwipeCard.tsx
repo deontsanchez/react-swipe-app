@@ -6,10 +6,16 @@ import {
   Image,
   Dimensions,
   ViewStyle,
+  StatusBar,
+  Platform,
 } from 'react-native';
-import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
+import { useVideoPlayer, VideoView } from 'expo-video';
 
 const { width, height } = Dimensions.get('window');
+// Account for the status bar height on iOS
+const statusBarHeight =
+  Platform.OS === 'ios' ? StatusBar.currentHeight || 0 : 0;
+const screenHeight = height;
 
 interface SwipeCardProps {
   item: {
@@ -24,39 +30,48 @@ interface SwipeCardProps {
 }
 
 const SwipeCard = ({ item, style, isVisible }: SwipeCardProps) => {
-  const videoRef = useRef<Video>(null);
-
-  useEffect(() => {
-    // Auto-play or pause video based on visibility
-    if (videoRef.current) {
-      if (isVisible && item.type === 'video') {
-        videoRef.current.playAsync();
-      } else if (!isVisible && item.type === 'video') {
-        videoRef.current.pauseAsync();
+  const videoPlayer = useVideoPlayer(
+    item.type === 'video' ? item.content : '',
+    player => {
+      player.loop = true;
+      if (isVisible) {
+        player.play();
+      } else {
+        player.pause();
       }
     }
-  }, [isVisible, item.type]);
+  );
+
+  useEffect(() => {
+    if (item.type === 'video') {
+      if (isVisible) {
+        videoPlayer.play();
+      } else {
+        videoPlayer.pause();
+      }
+    }
+  }, [isVisible, item.type, videoPlayer]);
 
   return (
     <View style={[styles.card, style]}>
       {item.type === 'image' && (
-        <Image
-          source={{ uri: item.content }}
-          style={styles.media}
-          resizeMode="cover"
-        />
+        <View style={styles.mediaContainer}>
+          <Image
+            source={{ uri: item.content }}
+            style={styles.media}
+            resizeMode="cover"
+          />
+        </View>
       )}
 
       {item.type === 'video' && (
-        <Video
-          ref={videoRef}
-          source={{ uri: item.content }}
-          style={styles.media}
-          resizeMode={ResizeMode.COVER}
-          isLooping
-          shouldPlay={isVisible}
-          useNativeControls={false}
-        />
+        <View style={styles.mediaContainer}>
+          <VideoView
+            player={videoPlayer}
+            style={styles.media}
+            allowsFullscreen={false}
+          />
+        </View>
       )}
 
       {item.type === 'text' && (
@@ -80,25 +95,42 @@ const SwipeCard = ({ item, style, isVisible }: SwipeCardProps) => {
 const styles = StyleSheet.create({
   card: {
     width,
-    height: height,
+    height: screenHeight,
     backgroundColor: '#000',
-    justifyContent: 'center',
-    alignItems: 'center',
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  mediaContainer: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   media: {
     width: '100%',
     height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   textContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
+    height: '100%',
     padding: 20,
   },
   text: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 24,
     textAlign: 'center',
+    fontWeight: '500',
   },
   overlay: {
     position: 'absolute',
@@ -106,17 +138,18 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    paddingBottom: 40,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   title: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 8,
   },
   description: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 16,
   },
 });
 

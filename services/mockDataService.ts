@@ -6,16 +6,16 @@ interface CardItem {
   description?: string;
 }
 
-// Sample image URLs from Unsplash
+// Sample image URLs from Unsplash (using portrait and higher quality images)
 const sampleImages = [
-  'https://images.unsplash.com/photo-1588499756884-d72584d84df5?q=80&w=2787&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1579762593175-20226054cad0?q=80&w=2942&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2864&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2940&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=2787&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?q=80&w=2874&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1570166146566-8512efb94688?q=80&w=2840&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1484621781395-c2ec0a3d1e74?q=80&w=2832&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1611601322175-ef8ec8c85f01?q=80&w=1964&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1516914589923-f105f0bc5fde?q=80&w=1974&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1604537466608-109fa2f16c3b?q=80&w=1969&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1604537529428-15bcbeecfe4d?q=80&w=1949&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1974&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=2070&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1682687982167-d7fb3ed8541d?q=80&w=1974&auto=format&fit=crop',
 ];
 
 // Sample video URLs from reliable sources
@@ -27,15 +27,16 @@ const sampleVideos = [
   'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
 ];
 
+// Better formatted text content
 const sampleTexts = [
-  'Explore the wonders of nature',
-  'Discover new perspectives',
-  'Journey through imagination',
-  'Embrace the unexpected',
-  'Find beauty in simplicity',
-  'Create your own story',
-  'Connect with the world around you',
-  'Moments that matter',
+  "Life isn't about finding yourself.\nIt's about creating yourself.",
+  'The best way to predict the future\nis to create it.',
+  'Every moment is a fresh beginning.\nEmbrace it.',
+  'Do what you love,\nlove what you do.',
+  'Dream big.\nWork hard.\nStay focused.',
+  'The journey of a thousand miles\nbegins with a single step.',
+  'Be the change\nyou wish to see\nin the world.',
+  'Live life to the fullest,\nand focus on the positive.',
 ];
 
 let nextId = 1;
@@ -51,10 +52,10 @@ const generateRandomCard = (): CardItem => {
       id: String(nextId++),
       type: 'image',
       content: sampleImages[randomImageIndex],
-      title: Math.random() > 0.3 ? `Image ${nextId}` : undefined,
+      title: Math.random() > 0.3 ? 'Beautiful World' : undefined,
       description:
         Math.random() > 0.5
-          ? `This is a beautiful image #${nextId}`
+          ? 'Capture the moment and cherish the memories'
           : undefined,
     };
   } else if (random < 0.8) {
@@ -64,10 +65,10 @@ const generateRandomCard = (): CardItem => {
       id: String(nextId++),
       type: 'video',
       content: sampleVideos[randomVideoIndex],
-      title: Math.random() > 0.3 ? `Video ${nextId}` : undefined,
+      title: Math.random() > 0.3 ? 'Watch This' : undefined,
       description:
         Math.random() > 0.5
-          ? `Check out this amazing video #${nextId}`
+          ? 'Some moments are better experienced in motion'
           : undefined,
     };
   } else {
@@ -77,7 +78,7 @@ const generateRandomCard = (): CardItem => {
       id: String(nextId++),
       type: 'text',
       content: sampleTexts[randomTextIndex],
-      title: Math.random() > 0.3 ? `Thought ${nextId}` : undefined,
+      title: Math.random() > 0.3 ? 'Inspiration' : undefined,
     };
   }
 };

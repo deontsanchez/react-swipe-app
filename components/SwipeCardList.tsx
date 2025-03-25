@@ -9,11 +9,17 @@ import {
   Dimensions,
   ViewToken,
   ListRenderItemInfo,
+  StatusBar,
+  Platform,
 } from 'react-native';
 import SwipeCard from './SwipeCard';
 import { Animated } from 'react-native';
 
-const { height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+// Account for the status bar height on iOS
+const statusBarHeight =
+  Platform.OS === 'ios' ? StatusBar.currentHeight || 0 : 0;
+const screenHeight = height;
 
 interface CardItem {
   id: string;
@@ -57,7 +63,7 @@ const SwipeCardList = ({ initialData, loadMoreData }: SwipeCardListProps) => {
   const handleScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       const offsetY = event.nativeEvent.contentOffset.y;
-      const index = Math.floor(offsetY / height);
+      const index = Math.floor(offsetY / screenHeight);
 
       if (index !== currentIndex) {
         setCurrentIndex(index);
@@ -73,14 +79,20 @@ const SwipeCardList = ({ initialData, loadMoreData }: SwipeCardListProps) => {
 
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<CardItem>) => {
-      return <SwipeCard item={item} isVisible={index === currentIndex} />;
+      return (
+        <SwipeCard
+          item={item}
+          isVisible={index === currentIndex}
+          style={styles.card}
+        />
+      );
     },
     [currentIndex]
   );
 
   const getItemLayout = (_: any, index: number) => ({
-    length: height,
-    offset: height * index,
+    length: screenHeight,
+    offset: screenHeight * index,
     index,
   });
 
@@ -102,13 +114,14 @@ const SwipeCardList = ({ initialData, loadMoreData }: SwipeCardListProps) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar hidden />
       <FlatList
         ref={flatListRef}
         data={data}
         renderItem={renderItem}
         keyExtractor={(item: CardItem) => item.id}
         showsVerticalScrollIndicator={false}
-        snapToInterval={height}
+        snapToInterval={screenHeight}
         snapToAlignment="start"
         decelerationRate="fast"
         onScroll={Animated.event(
@@ -124,9 +137,11 @@ const SwipeCardList = ({ initialData, loadMoreData }: SwipeCardListProps) => {
         maxToRenderPerBatch={3}
         initialNumToRender={2}
         windowSize={5}
+        pagingEnabled={true}
         ListFooterComponent={
           loading ? <ActivityIndicator size="large" color="#fff" /> : null
         }
+        contentContainerStyle={styles.flatListContent}
       />
     </View>
   );
@@ -136,6 +151,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000',
+  },
+  card: {
+    flex: 1,
+    width: width,
+    height: screenHeight,
+  },
+  flatListContent: {
+    flexGrow: 1,
   },
 });
 
